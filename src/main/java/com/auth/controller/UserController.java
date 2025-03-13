@@ -601,7 +601,7 @@ public class UserController {
     			
     			redirectAttributes.addFlashAttribute("message","Please Enter valid credentials!!!");
     			//session.setAttribute("message", "Please Enter valid credentials!!!");
-    		    return "redirect:/";
+    		    return "redirect:/index_B";
     		}
     		
         } else {
