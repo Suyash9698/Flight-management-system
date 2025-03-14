@@ -606,10 +606,8 @@ public class UserController {
     			
     			redirectAttributes.addFlashAttribute("message","Please Enter valid credentials!!!");
     			//session.setAttribute("message", "Please Enter valid credentials!!!");
-    			String referer = request.getHeader("referer");
-
-// Redirect back to the referer URL
-return "redirect:" + referer;
+    			
+return "redirect:" + "https://flight-management-system-production.up.railway.app/index_B";
 
 
     		}
@@ -645,7 +643,7 @@ return "redirect:" + referer;
      		else {
      			
      			redirectAttributes.addFlashAttribute("message", "Please Enter valid credentials!!!");
-     		    return "redirect:" + request.getContextPath() + "index_B";
+     		    return "redirect:" + "https://flight-management-system-production.up.railway.app/index_B";
      		}
         }
 		
