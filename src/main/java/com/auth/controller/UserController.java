@@ -171,7 +171,7 @@ public class UserController {
 	
 	@GetMapping("/signout")
 	public String logOut(
-			RedirectAttributes redirectAttributes
+			RedirectAttributes redirectAttributes,HttpServletRequest request
 			){
 		
 		// Create CurrentUserWhoBooked object
@@ -181,7 +181,7 @@ public class UserController {
 		long present = logRepo.count();
 		if(present == 0) {
 			redirectAttributes.addFlashAttribute("messageLogOut","Please Log In First!");
-			return "redirect:/";
+			return "redirect:" + request.getContextPath() + "index_B";
 		}
 		
 		//delete this data from database
@@ -189,7 +189,7 @@ public class UserController {
 		
 		redirectAttributes.addFlashAttribute("messageLogOut","Logged Out Successfully!");
 		
-		return "redirect:/";
+		return "redirect:" + request.getContextPath() + "index";
 		
 	}
 	
@@ -318,13 +318,14 @@ public class UserController {
 			@RequestParam(name="confirm_pass") String confirm_password,
 			@RequestParam(name="reset_email") String email,
 			
-			RedirectAttributes redirectAttributes
+			RedirectAttributes redirectAttributes,
+			HttpServletRequest request
 			) {
 		
 		
 		if(!new_password.equals(confirm_password)) {
 			redirectAttributes.addFlashAttribute("message", "Passwords do not match");
-            return "redirect:/reset_password"; 
+            return "redirect:" + request.getContextPath() + "reset_password";
 		}
 		
 		UserDetail user = userService.giveMeAllUsersByEmail(email);
@@ -334,7 +335,7 @@ public class UserController {
 		if(isMatch == true) {
 			redirectAttributes.addFlashAttribute("message", "Please choose different password which you have not used recently");
 			
-            return "redirect:/reset_password"; 
+            return "redirect:" + request.getContextPath() + "reset_password";
 		}
 		
 		
@@ -347,7 +348,7 @@ public class UserController {
 		
 		redirectAttributes.addFlashAttribute("message", "Password reset successfully");
         
-		return "redirect:/";
+		return "redirect:" + request.getContextPath() + "index_B";
 		
 		
 	}
@@ -356,7 +357,8 @@ public class UserController {
 	public String otpEmailValidate(
 			@RequestParam(name="hidden-otp-mail-reset") String otp,
 			@RequestParam(name="mail-reset") String mail,
-			RedirectAttributes redirectAttributes
+			RedirectAttributes redirectAttributes,
+			HttpServletRequest request
 			) 
 	{
 		
@@ -375,13 +377,13 @@ public class UserController {
 		redirectAttributes.addFlashAttribute("reset_email", mail);
 		
 		
-		return "redirect:/reset_password";
+		return  "redirect:" + request.getContextPath() + "reset_password";
 		
 	}
 	
 	@PostMapping("/reset")
 	public String resetPassword(@RequestParam(name="hidden-mail") String registerEmail,
-			RedirectAttributes redirectAttributes
+			RedirectAttributes redirectAttributes, HttpServletRequest request
 			) {
 		
 		//do it search in all database and find this email
@@ -409,7 +411,7 @@ public class UserController {
 	    
 	    otpStorage.storeOTP(registerEmail, genotp);
 		
-		return "redirect:/"; 
+		return "redirect:" + request.getContextPath() + "index_B";
 	}
 	
 	
@@ -423,7 +425,8 @@ public class UserController {
 			@RequestParam(name="userType") String userType,
 			
 			
-			RedirectAttributes redirectAttributes
+			RedirectAttributes redirectAttributes,
+			HttpServletRequest request
 			
 			) {
 		
@@ -435,7 +438,7 @@ public class UserController {
 		
 		if(!hereotp.equals(otp)) {
 			redirectAttributes.addFlashAttribute("message", "Please Enter Valid OTP");
-            return "redirect:/"; 
+            return "redirect:" + request.getContextPath() + "index_B";
 		}
 		
 		otpStorage.removeOTP(registerEmail);
@@ -470,7 +473,7 @@ public class UserController {
 		
 		
 		redirectAttributes.addFlashAttribute("message", "User Registered Successfully");
-        return "redirect:/"; 
+        return "redirect:" + request.getContextPath() + "index_B";
 	}
 	
 	
@@ -478,14 +481,15 @@ public class UserController {
 	@PostMapping("/register")
 	public String saveUser(@ModelAttribute UserDetail user,
 			@RequestParam("userType") String userType,
-			HttpSession session,RedirectAttributes redirectAttributes) {
+			HttpSession session,RedirectAttributes redirectAttributes,
+			HttpServletRequest request) {
 	    
 		if(userType.equals("user")) {
 	    
 		  //check if email is already registered
 		  if (userService.isEmailRegistered(user.getRegisterEmail())) {
 			redirectAttributes.addFlashAttribute("message", "Email is already registered");
-            return "redirect:/"; 
+            return "redirect:" + request.getContextPath() + "index_B";
           }
 		}
 		
@@ -496,7 +500,7 @@ public class UserController {
 			
 			if(ans == true) {
 				redirectAttributes.addFlashAttribute("message", "Email is already registered");
-	            return "redirect:/"; 
+	            return "redirect:" + request.getContextPath() + "index_B";
 			}
 			
 		}
@@ -505,7 +509,7 @@ public class UserController {
 	    if (!user.getRegisterPassword().equals(user.getConfirmPassword())) {
 	        // If the passwords don't match, set an error message and return to the registration form
 	    	redirectAttributes.addFlashAttribute("message", "Passwords do not match");
-	        return "redirect:/"; 
+	        return "redirect:" + request.getContextPath() + "index_B";
 	    }
 		
 	    
@@ -513,7 +517,7 @@ public class UserController {
 	    if (user.getRegisterPassword().length() <= 4) {
 	        // If the passwords don't match, set an error message and return to the registration form
 	    	redirectAttributes.addFlashAttribute("message", "Password is too small!");
-	        return "redirect:/"; 
+	        return "redirect:" + request.getContextPath() + "index_B";
 	    }
 	    
 	    String genotp = emailOTPHelper.generateOTP();
@@ -541,13 +545,14 @@ public class UserController {
 	          redirectAttributes.addFlashAttribute("messages","haaa");
 	    
 	    
-	    return "redirect:/";
+	    return "redirect:" + request.getContextPath() + "index_B";
 	}
 	
 	@PostMapping("/login")
 	public String login(@RequestParam String loginName, @RequestParam String loginPassword, @RequestParam String action,
 			HttpSession session,
 			RedirectAttributes redirectAttributes,
+			HttpServletRequest request,
 			Model model) {
 		
 		
@@ -601,7 +606,8 @@ public class UserController {
     			
     			redirectAttributes.addFlashAttribute("message","Please Enter valid credentials!!!");
     			//session.setAttribute("message", "Please Enter valid credentials!!!");
-    		    return "redirect:/index_B";
+    			return "redirect:" + request.getContextPath() + "/index_B";
+
     		}
     		
         } else {
@@ -635,7 +641,7 @@ public class UserController {
      		else {
      			
      			redirectAttributes.addFlashAttribute("message", "Please Enter valid credentials!!!");
-     		    return "redirect:/";
+     		    return "redirect:" + request.getContextPath() + "index_B";
      		}
         }
 		
@@ -783,7 +789,8 @@ public class UserController {
 	        
 	        
 	        
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes,
+			HttpServletRequest request) {
 		//sending boarding pass over email for booking
 		// Create CurrentUserWhoBooked object
 		CurrentlyLogged hereUser = logRepo.select();
@@ -819,7 +826,7 @@ public class UserController {
 	    redirectAttributes.addFlashAttribute("message","Welcome to FlyHighHub.com!!!"); 
 	    redirectAttributes.addFlashAttribute("userName",hereUser.getRegisterName());
 	    redirectAttributes.addFlashAttribute("msg_email","Boarding Pass Was Sent to Your E-mail Id Successfully!");
-	    return "redirect:/";
+	    return "redirect:" + request.getContextPath() + "index_B";
 	}
 	
 	@PostMapping("/boarding")
