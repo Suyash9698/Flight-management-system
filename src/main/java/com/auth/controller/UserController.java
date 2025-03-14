@@ -558,7 +558,7 @@ public class UserController {
 		
 		if ("user".equals(action)) {
             // Handle login logic
-            System.out.println("user button clicked");
+            
             UserDetail result = userService.login(loginName,loginPassword);
     		if(Objects.nonNull(result)) {
     			session.setAttribute("message", "Login successfully....");
