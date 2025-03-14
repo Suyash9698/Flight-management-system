@@ -607,7 +607,7 @@ public class UserController {
     			redirectAttributes.addFlashAttribute("message","Please Enter valid credentials!!!");
     			//session.setAttribute("message", "Please Enter valid credentials!!!");
     			
-return "redirect:index_B";
+return "redirect:/index_B";
 
 
     		}
@@ -643,7 +643,7 @@ return "redirect:index_B";
      		else {
      			
      			redirectAttributes.addFlashAttribute("message", "Please Enter valid credentials!!!");
-     		    return "redirect:" + "https://flight-management-system-production.up.railway.app/index_B";
+     		    return "redirect:/index_B";
      		}
         }
 		
