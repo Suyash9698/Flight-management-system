@@ -606,7 +606,11 @@ public class UserController {
     			
     			redirectAttributes.addFlashAttribute("message","Please Enter valid credentials!!!");
     			//session.setAttribute("message", "Please Enter valid credentials!!!");
-    			return "redirect:" + request.getContextPath() + "/index_B";
+    			String referer = request.getHeader("referer");
+
+// Redirect back to the referer URL
+return "redirect:" + referer;
+
 
     		}
     		
