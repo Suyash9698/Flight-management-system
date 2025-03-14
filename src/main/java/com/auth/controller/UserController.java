@@ -599,14 +599,14 @@ public class UserController {
 			    
 			    model.addAttribute("stored_dob",result.getDob());
 			    model.addAttribute("stored_email",result.getRegisterEmail());
-			    
+			   System.out.println("Invalid flight_booking"); 
     			return "flight_booking";
     		}
     		else {
-    			
+    			System.out.println("Invalid index_B");
     			redirectAttributes.addFlashAttribute("message","Please Enter valid credentials!!!");
     			//session.setAttribute("message", "Please Enter valid credentials!!!");
-    			System.out.println("Invalid");
+    			
 return "redirect:index_B";
 
 
